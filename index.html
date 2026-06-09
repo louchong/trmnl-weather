@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TRMNL Hong Kong Weather</title>
+  <title>TRMNL OG High-Density HK Weather</title>
   <style>
-    /* Absolute reset for tight pixel-perfect layout control */
+    /* Strict pixel-perfect structural reset */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -22,275 +22,362 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      padding: 24px;
+      padding: 16px;
     }
 
-    /* Top row: Location and live timestamp */
+    /* Tight-knit, high-density header component */
     header {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      border-bottom: 4px solid #000000;
-      padding-bottom: 12px;
-      margin-bottom: 20px;
+      align-items: flex-end;
+      border-bottom: 3px solid #000000;
+      padding-bottom: 4px;
+      margin-bottom: 12px;
     }
 
     h1 {
-      font-size: 32px;
+      font-size: 26px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
     #time {
-      font-size: 20px;
-      font-weight: 500;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: right;
     }
 
-    /* Main body layout grid */
-    .content-grid {
+    /* 3-Column Split Framework to maximize every square pixel */
+    .dashboard-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      grid-template-columns: 240px 250px 1fr;
+      gap: 16px;
       flex-grow: 1;
+      height: 250px; /* Constraining upper block height explicitly */
     }
 
-    /* Left Side: Current Metric Matrix */
-    .weather-box {
+    /* COLUMN 1: Core Observational Readouts */
+    .core-panel {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
-    .temp-row {
+    .temp-wrapper {
       display: flex;
       align-items: flex-start;
-      margin-top: -10px;
+      margin-top: -6px;
     }
 
-    .temperature {
-      font-size: 110px;
+    .giant-temp {
+      font-size: 80px;
       font-weight: 800;
-      line-height: 0.9;
+      line-height: 0.85;
     }
 
-    .unit {
-      font-size: 40px;
+    .deg-unit {
+      font-size: 28px;
       font-weight: 700;
-      margin-top: 10px;
-      margin-left: 4px;
+      margin-top: 4px;
+      margin-left: 2px;
     }
 
-    .condition-text {
-      font-size: 24px;
+    .condition-lbl {
+      font-size: 18px;
       font-weight: 700;
-      margin-top: 10px;
       line-height: 1.2;
+      margin-top: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    .meta-metrics {
-      margin-top: auto;
-      font-size: 20px;
-      font-weight: 600;
-      display: flex;
-      gap: 30px;
-      border-top: 2px dashed #000000;
-      padding-top: 15px;
+    .mini-metrics {
+      border-top: 2px solid #000000;
+      padding-top: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.4;
     }
 
-    /* Right Side: Heavy-duty visual layout for HKO Warnings */
-    .warning-box {
-      border: 4px solid #000000;
-      border-radius: 8px;
-      padding: 16px;
+    /* COLUMN 2: Regional Hub Telemetry Grid */
+    .regional-panel {
       display: flex;
       flex-direction: column;
     }
 
-    .warning-header {
-      font-size: 20px;
+    .panel-title {
+      font-size: 13px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      border-bottom: 2px solid #000000;
-      padding-bottom: 6px;
-      margin-bottom: 12px;
+      border-bottom: 2px dashed #000000;
+      padding-bottom: 2px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
     }
 
-    /* Warning box state rules */
-    .warning-box.active {
+    .station-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 4px 0;
+      border-bottom: 1px solid #eeeeee;
+    }
+
+    /* COLUMN 3: Severe Threat Context Block */
+    .warning-panel {
+      border: 3px solid #000000;
+      border-radius: 6px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      background-color: #ffffff;
+    }
+
+    .warning-panel.alert-active {
       background-color: #000000;
       color: #ffffff;
-    }
-    .warning-box.active .warning-header {
-      border-color: #ffffff;
     }
 
     .warning-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 6px;
       overflow: hidden;
     }
 
-    .warning-item {
-      font-size: 22px;
+    .warning-row {
+      font-size: 16px;
       font-weight: 700;
-      line-height: 1.3;
       display: flex;
       align-items: center;
+      gap: 8px;
+    }
+
+    .warning-badge {
+      background-color: #000000;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 3px;
+      border: 1px solid #ffffff;
+    }
+
+    .warning-panel.alert-active .warning-badge {
+      background-color: #ffffff;
+      color: #000000;
+      border: none;
+    }
+
+    .empty-warnings {
+      font-size: 16px;
+      font-weight: 700;
+      color: #666666;
+      text-align: center;
+      margin: auto 0;
+      font-style: italic;
+    }
+
+    /* LOWER ZONE: Horizontal Short-Range Outlook Track */
+    .forecast-panel {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .forecast-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
 
-    /* Solid inverted badge for maximum visibility on ink display */
-    .warning-box.active .warning-item-badge {
+    .forecast-card {
       background-color: #ffffff;
-      color: #000000;
+      border: 2px solid #000000;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 125px;
     }
-    
-    .warning-item-badge {
-      background-color: #000000;
-      color: #ffffff;
-      padding: 2px 8px;
+
+    .fc-day {
       font-size: 14px;
       font-weight: 800;
-      border-radius: 4px;
       text-transform: uppercase;
     }
 
-    .no-warnings {
-      font-size: 22px;
-      font-weight: 600;
-      color: #666666;
-      margin: auto 0;
-      text-align: center;
-      font-style: italic;
+    .fc-temp {
+      font-size: 20px;
+      font-weight: 800;
+      margin: 4px 0;
+    }
+
+    .fc-desc {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #333333;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Hong Kong</h1>
-    <div id="time">Loading update...</div>
+    <h1>HK Weather Map</h1>
+    <div id="time">Loading...</div>
   </header>
 
-  <div class="content-grid">
-    <!-- Left: Core Conditions -->
-    <div class="weather-box">
+  <!-- Upper Grid Division -->
+  <div class="dashboard-grid">
+    <!-- Col 1: Core Metrics -->
+    <div class="core-panel">
       <div>
-        <div class="temp-row">
-          <span class="temperature" id="temp">--</span>
-          <span class="unit">°C</span>
+        <div class="temp-wrapper">
+          <span class="giant-temp" id="curr-temp">--</span>
+          <span class="deg-unit">°C</span>
         </div>
-        <div class="condition-text" id="condition">Fetching data...</div>
+        <div class="condition-lbl" id="curr-desc">Loading observations...</div>
       </div>
-      
-      <div class="meta-metrics">
-        <div>Humidity: <span id="humidity">--</span>%</div>
-        <div>UV Index: <span id="uv">--</span></div>
+      <div class="mini-metrics">
+        <div>Humidity: <span id="curr-rh">--</span>%</div>
+        <div>UV Index: <span id="curr-uv">--</span></div>
+        <div>Pressure: <span id="curr-pres">--</span> hPa</div>
       </div>
     </div>
 
-    <!-- Right: Active Threat Vectors -->
-    <div class="warning-box" id="warningBox">
-      <div class="warning-header">Signals & Warnings</div>
-      <div class="warning-list" id="warningList">
-        <div class="no-warnings">Checking signals...</div>
+    <!-- Col 2: Regional Observations -->
+    <div class="regional-panel">
+      <div class="panel-title">Regional Network</div>
+      <div id="regional-list">
+        <div class="station-row"><span>Central</span><span>--°</span></div>
+        <div class="station-row"><span>Tsim Sha Tsui</span><span>--°</span></div>
+        <div class="station-row"><span>Sha Tin</span><span>--°</span></div>
+        <div class="station-row"><span>HK Airport</span><span>--°</span></div>
+        <div class="station-row"><span>Sai Kung</span><span>--°</span></div>
+      </div>
+    </div>
+
+    <!-- Col 3: Alerts/Warnings -->
+    <div class="warning-panel" id="alertBox">
+      <div class="panel-title" style="border-color:inherit;">Active HKO Signals</div>
+      <div class="warning-list" id="alertList">
+        <div class="empty-warnings">Checking systems...</div>
       </div>
     </div>
   </div>
 
-  <script>
-    async function fetchHKWeather() {
-      try {
-        // HKO endpoints for Current Weather and Active Warning Summaries
-        const weatherUrl = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en';
-        const warningUrl = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warnsum&lang=en';
+  <!-- Lower Outlook Track -->
+  <div class="forecast-panel">
+    <div class="panel-title">4-Day Short-Range Outlook</div>
+    <div class="forecast-row" id="forecastRow">
+      <!-- Injected via JavaScript -->
+    </div>
+  </div>
 
-        const [weatherRes, warningRes] = await Promise.all([
-          fetch(weatherUrl),
-          fetch(warningUrl)
+  <script>
+    async function refreshData() {
+      try {
+        const rhrreadUrl = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en';
+        const warnsumUrl = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warnsum&lang=en';
+        const fndUrl = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en';
+
+        const [rCurrent, rWarnings, rForecast] = await Promise.all([
+          fetch(rhrreadUrl), fetch(warnsumUrl), fetch(fndUrl)
         ]);
 
-        const weatherData = await weatherRes.json();
-        const warningData = await warningRes.json();
+        const current = await rCurrent.json();
+        const warnings = await rWarnings.json();
+        const forecast = await rForecast.json();
 
-        // 1. Process and assign core temperatures (Using HKO main station as anchor)
-        if (weatherData.temperature && weatherData.temperature.data.length > 0) {
-          const hkoTemp = weatherData.temperature.data.find(item => item.place === 'Hong Kong Observatory');
-          document.getElementById('temp').innerText = hkoTemp ? hkoTemp.value : weatherData.temperature.data[0].value;
+        // 1. Core Pillar Assignments
+        if (current.temperature && current.temperature.data) {
+          const hko = current.temperature.data.find(d => d.place === 'Hong Kong Observatory');
+          document.getElementById('curr-temp').innerText = hko ? hko.value : current.temperature.data[0].value;
+        }
+        if (current.humidity && current.humidity.data) {
+          document.getElementById('curr-rh').innerText = current.humidity.data[0].value;
+        }
+        document.getElementById('curr-uv').innerText = (current.uvindex && current.uvindex.data && current.uvindex.data.length > 0) ? current.uvindex.data[0].value : '0';
+        document.getElementById('curr-pres').innerText = (current.barometer && current.barometer.data) ? current.barometer.data[0].value : '1012';
+        document.getElementById('curr-desc').innerText = current.weatherDescription || 'Stable';
+
+        // 2. Timestamp Format (Optimized for space)
+        if (current.updateTime) {
+          const d = new Date(current.updateTime);
+          document.getElementById('time').innerText = d.toLocaleTimeString('en-HK', { hour: '2-digit', minute: '2-digit', hour12: true }) + '\n' + d.toLocaleDateString('en-HK', { month: 'short', day: 'numeric' });
         }
 
-        // 2. Humidity
-        if (weatherData.humidity && weatherData.humidity.data.length > 0) {
-          document.getElementById('humidity').innerText = weatherData.humidity.data[0].value;
+        // 3. Regional Microclimates (Filters out top active hubs)
+        const hubs = { 'Central': '--°', 'Tsim Sha Tsui': '--°', 'Sha Tin': '--°', 'Hong Kong International Airport': '--°', 'Sai Kung': '--°' };
+        if (current.temperature && current.temperature.data) {
+          current.temperature.data.forEach(item => {
+            if (item.place in hubs) hubs[item.place] = `${item.value}°`;
+          });
+        }
+        const regList = document.getElementById('regional-list');
+        regList.innerHTML = '';
+        for (const [place, val] of Object.entries(hubs)) {
+          const displayName = place === 'Hong Kong International Airport' ? 'HK Airport' : place;
+          regList.innerHTML += `<div class="station-row"><span>${displayName}</span><span>${val}</span></div>`;
         }
 
-        // 3. UV Index
-        if (weatherData.uvindex && weatherData.uvindex.data && weatherData.uvindex.data.length > 0) {
-          document.getElementById('uv').innerText = weatherData.uvindex.data[0].value;
-        } else {
-          document.getElementById('uv').innerText = '0';
-        }
+        // 4. Warning Array Execution
+        const alertBox = document.getElementById('alertBox');
+        const alertList = document.getElementById('alertList');
+        alertList.innerHTML = '';
+        const keys = Object.keys(warnings);
 
-        // 4. Fallback logic text description for cloud cover/rain
-        if (weatherData.rainfall && weatherData.rainfall.data) {
-          // If we have text descriptions, use them
-          const desc = weatherData.weatherDescription || "Fine Conditions";
-          document.getElementById('condition').innerText = desc;
-        }
-
-        // 5. Update Timestamp
-        if (weatherData.updateTime) {
-          const dateObj = new Date(weatherData.updateTime);
-          document.getElementById('time').innerText = dateObj.toLocaleTimeString('en-HK', { 
-            hour: '2-digit', 
-            minute: '2-digit', 
-            hour12: true 
-          }) + " HKT";
-        }
-
-        // 6. Warning System Handling
-        const warningBox = document.getElementById('warningBox');
-        const warningList = document.getElementById('warningList');
-        warningList.innerHTML = ''; // Wipe loading placeholder
-
-        // The HKO warnsum endpoint returns active warning key-value pairings when alerts are live
-        const activeWarningKeys = Object.keys(warningData);
-
-        if (activeWarningKeys.length > 0) {
-          warningBox.classList.add('active'); // Invert color scheme instantly to draw eye
-
-          activeWarningKeys.forEach(key => {
-            const alert = warningData[key];
-            const item = document.createElement('div');
-            item.className = 'warning-item';
-            
-            // Clean up naming format if sub-codes exist (e.g., specific rainstorm colors)
-            const alertName = alert.name.replace('Warning', '').trim();
-            const alertCode = alert.code || "ALERT";
-
-            item.innerHTML = `<span class="warning-item-badge">${alertCode}</span> <span>${alertName}</span>`;
-            warningList.appendChild(item);
+        if (keys.length > 0) {
+          alertBox.classList.add('alert-active');
+          keys.forEach(k => {
+            const row = document.createElement('div');
+            row.className = 'warning-row';
+            row.innerHTML = `<span class="warning-badge">${warnings[k].code}</span><span>${warnings[k].name.replace('Warning', '').trim()}</span>`;
+            alertList.appendChild(row);
           });
         } else {
-          // No alerts in force: safely revert box to neutral light gray/white baseline
-          warningBox.classList.remove('active');
-          warningList.innerHTML = '<div class="no-warnings">No Active Warning Signals</div>';
+          alertBox.classList.remove('alert-active');
+          alertList.innerHTML = '<div class="empty-warnings">No Active HKO Alerts</div>';
         }
 
-      } catch (error) {
-        console.error('Data pull failure:', error);
-        document.getElementById('condition').innerText = 'Error loading live HKO streams.';
+        // 5. Short-Range 4-Day Horizontal Horizon Layout
+        const fcRow = document.getElementById('forecastRow');
+        fcRow.innerHTML = '';
+        if (forecast.weatherForecast) {
+          // Select first 4 days to map horizontal limits cleanly
+          forecast.weatherForecast.slice(0, 4).forEach(day => {
+            const shortDay = day.week.substring(0, 3);
+            const displayDate = day.forecastDate.substring(6,8) + '/' + day.forecastDate.substring(4,6);
+            
+            fcRow.innerHTML += `
+              <div class="forecast-card">
+                <div style="display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px dashed #000; padding-bottom:2px;">
+                  <span class="fc-day">${shortDay}</span>
+                  <span style="font-size:11px; font-weight:700; color:#555;">${displayDate}</span>
+                </div>
+                <div class="fc-temp">${day.forecastMintemp.value}°–${day.forecastMaxtemp.value}°</div>
+                <div class="fc-desc">${day.forecastWeather}</div>
+              </div>`;
+          });
+        }
+
+      } catch (err) {
+        console.error('Data pipeline exception:', err);
+        document.getElementById('curr-desc').innerText = 'Sync tracking failure.';
       }
     }
 
-    // Fire immediately on render
-    fetchHKWeather();
-    
-    // Auto-refresh script context every 10 minutes (600000ms) inside local browser sandbox 
-    setInterval(fetchHKWeather, 600000);
+    refreshData();
+    setInterval(refreshData, 600000); // 10 minute updates
   </script>
 </body>
 </html>
