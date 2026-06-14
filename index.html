@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TRMNL OG High-Density HK Weather</title>
+  <title>TRMNL OG Bilingual HK Weather Map</title>
   <style>
-    /* Strict pixel-perfect structural reset */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang HK", "Microsoft JhengHei", sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -22,43 +20,43 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      padding: 16px;
+      padding: 14px;
     }
 
-    /* High-density header component */
     header {
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
       border-bottom: 3px solid #000000;
-      padding-bottom: 4px;
-      margin-bottom: 12px;
+      padding-bottom: 2px;
+      margin-bottom: 10px;
     }
 
-    h1 {
-      font-size: 26px;
+    .title-group h1 {
+      font-size: 24px;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      line-height: 1.1;
+    }
+    .title-group span {
+      font-size: 14px;
+      font-weight: 700;
+      color: #444444;
     }
 
     #time {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
       text-align: right;
       line-height: 1.2;
     }
 
-    /* 3-Column Split Framework to maximize space */
     .dashboard-grid {
       display: grid;
-      grid-template-columns: 250px 240px 1fr;
-      gap: 16px;
-      flex-grow: 1;
-      height: 250px;
+      grid-template-columns: 260px 220px 1fr;
+      gap: 14px;
+      height: 255px;
     }
 
-    /* COLUMN 1: Core Observational Readouts */
     .core-panel {
       display: flex;
       flex-direction: column;
@@ -67,267 +65,162 @@
 
     .condition-block {
       display: flex;
-      gap: 12px;
+      gap: 8px;
       align-items: center;
     }
 
-    .temp-wrapper {
-      display: flex;
-      align-items: flex-start;
-    }
-
     .giant-temp {
-      font-size: 76px;
+      font-size: 70px;
       font-weight: 800;
       line-height: 0.85;
     }
 
     .deg-unit {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 700;
-      margin-top: 4px;
-      margin-left: 2px;
     }
 
     .main-icon-holder svg {
-      width: 64px;
-      height: 64px;
+      width: 58px;
+      height: 58px;
       stroke: #000000;
       fill: none;
       stroke-width: 2.5;
     }
 
     .condition-lbl {
-      font-size: 17px;
+      font-size: 14px;
       font-weight: 700;
-      line-height: 1.2;
+      line-height: 1.3;
       margin-top: 4px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
     }
 
     .mini-metrics {
       border-top: 2px solid #000000;
-      padding-top: 8px;
-      font-size: 15px;
+      padding-top: 6px;
+      font-size: 14px;
       font-weight: 700;
-      line-height: 1.4;
-    }
-
-    /* COLUMN 2: Regional Hub Telemetry Grid */
-    .regional-panel {
-      display: flex;
-      flex-direction: column;
+      line-height: 1.3;
     }
 
     .panel-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       text-transform: uppercase;
       border-bottom: 2px dashed #000000;
       padding-bottom: 2px;
-      margin-bottom: 8px;
-      letter-spacing: 0.5px;
+      margin-bottom: 6px;
     }
 
     .station-row {
       display: flex;
       justify-content: space-between;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      padding: 4px 0;
+      padding: 3px 0;
       border-bottom: 1px solid #eeeeee;
     }
+    .station-zh { font-size: 13px; color: #444; }
 
-    /* COLUMN 3: Severe Threat Context Block */
     .warning-panel {
       border: 3px solid #000000;
       border-radius: 6px;
-      padding: 10px;
+      padding: 8px;
       display: flex;
       flex-direction: column;
-      background-color: #ffffff;
     }
-
-    .warning-panel.alert-active {
-      background-color: #000000;
-      color: #ffffff;
-    }
-
-    .warning-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      overflow: hidden;
-    }
+    .warning-panel.alert-active { background-color: #000000; color: #ffffff; }
 
     .warning-row {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      margin-bottom: 4px;
     }
 
     .warning-badge {
       background-color: #000000;
       color: #ffffff;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
-      padding: 1px 5px;
+      padding: 1px 4px;
       border-radius: 3px;
       border: 1px solid #ffffff;
     }
-
-    .warning-panel.alert-active .warning-badge {
-      background-color: #ffffff;
-      color: #000000;
-      border: none;
-    }
+    .warning-panel.alert-active .warning-badge { background-color: #ffffff; color: #000000; border: none; }
 
     .empty-warnings {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       color: #666666;
       text-align: center;
       margin: auto 0;
-      font-style: italic;
     }
 
-    /* LOWER ZONE: Horizontal Short-Range Outlook Track */
-    .forecast-panel {
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .forecast-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
+    .forecast-panel { margin-top: auto; }
+    .forecast-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    
     .forecast-card {
-      background-color: #ffffff;
       border: 2px solid #000000;
-      padding: 8px;
+      padding: 6px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: 125px;
+      height: 135px;
     }
 
-    .fc-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px dashed #000;
-      padding-bottom: 4px;
-    }
-
-    .fc-day-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .fc-day {
-      font-size: 14px;
-      font-weight: 800;
-      text-transform: uppercase;
-      line-height: 1;
-    }
-
-    .fc-date {
-      font-size: 11px;
-      font-weight: 700;
-      color: #555555;
-    }
-
-    .fc-icon-holder svg {
-      width: 28px;
-      height: 28px;
-      stroke: #000000;
-      fill: none;
-      stroke-width: 2.5;
-    }
-
-    .fc-temp {
-      font-size: 20px;
-      font-weight: 800;
-      margin: 2px 0;
-    }
-
-    .fc-desc {
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.2;
-      color: #333333;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
+    .fc-header-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #000; padding-bottom: 2px; }
+    .fc-day { font-size: 13px; font-weight: 800; }
+    .fc-zh { font-size: 11px; color: #555; }
+    .fc-icon-holder svg { width: 26px; height: 26px; stroke: #000000; fill: none; stroke-width: 2.5; }
+    .fc-temp { font-size: 18px; font-weight: 800; }
+    .fc-desc { font-size: 11px; font-weight: 700; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>HK Weather Map</h1>
-    <div id="time">Loading...</div>
+    <div class="title-group">
+      <h1>香港天氣地圖</h1>
+      <span>HK Weather Map</span>
+    </div>
+    <div id="time">更新中...</div>
   </header>
 
-  <!-- Upper Grid Division -->
   <div class="dashboard-grid">
-    <!-- Col 1: Core Metrics -->
     <div class="core-panel">
       <div>
         <div class="condition-block">
-          <div class="temp-wrapper">
-            <span class="giant-temp" id="curr-temp">--</span>
-            <span class="deg-unit">°C</span>
-          </div>
-          <div class="main-icon-holder" id="main-icon">
-            <!-- Dynamic SVG Injected Here -->
-          </div>
+          <div class="temp-wrapper"><span class="giant-temp" id="curr-temp">--</span><span class="deg-unit">°C</span></div>
+          <div class="main-icon-holder" id="main-icon"></div>
         </div>
-        <div class="condition-lbl" id="curr-desc">Loading observations...</div>
+        <div class="condition-lbl" id="curr-desc">載入中...</div>
       </div>
       <div class="mini-metrics">
-        <div>Humidity: <span id="curr-rh">--</span>%</div>
-        <div>UV Index: <span id="curr-uv">--</span></div>
-        <div>Pressure: <span id="curr-pres">--</span> hPa</div>
+        <div>濕度 / Humid: <span id="curr-rh">--</span>%</div>
+        <div>紫外線 / UV: <span id="curr-uv">--</span></div>
+        <div>氣壓 / Baro: <span id="curr-pres">--</span> hPa</div>
       </div>
     </div>
 
-    <!-- Col 2: Regional Observations -->
     <div class="regional-panel">
-      <div class="panel-title">Regional Network</div>
-      <div id="regional-list">
-        <div class="station-row"><span>Central</span><span>--°</span></div>
-        <div class="station-row"><span>Tsim Sha Tsui</span><span>--°</span></div>
-        <div class="station-row"><span>Sha Tin</span><span>--°</span></div>
-        <div class="station-row"><span>HK Airport</span><span>--°</span></div>
-        <div class="station-row"><span>Sai Kung</span><span>--°</span></div>
-      </div>
+      <div class="panel-title">分區溫度 Regional</div>
+      <div id="regional-list"></div>
     </div>
 
-    <!-- Col 3: Alerts/Warnings -->
     <div class="warning-panel" id="alertBox">
-      <div class="panel-title" style="border-color:inherit;">Active HKO Signals</div>
+      <div class="panel-title" style="border-color:inherit;">警告信號 Warnings</div>
       <div class="warning-list" id="alertList">
-        <div class="empty-warnings">Checking systems...</div>
+        <div class="empty-warnings">系統檢查中...</div>
       </div>
     </div>
   </div>
 
-  <!-- Lower Outlook Track -->
   <div class="forecast-panel">
-    <div class="panel-title">4-Day Short-Range Outlook</div>
-    <div class="forecast-row" id="forecastRow">
-      <!-- Injected via JavaScript -->
-    </div>
+    <div class="panel-title">四天天氣預報 4-Day Outlook</div>
+    <div class="forecast-row" id="forecastRow"></div>
   </div>
 
   <script>
@@ -339,126 +232,102 @@
       windy: `<svg viewBox="0 0 24 24"><path d="M2 4h18a2 2 0 0 1 0 4H12M2 12h14a2 2 0 0 0 0-4M2 20h20a2 2 0 0 0 0-4H8"/></svg>`
     };
 
-    function getVectorIcon(iconId, textDescription) {
-      const id = parseInt(iconId);
-      const desc = (textDescription || '').toLowerCase();
-      
-      if ([50, 51, 52].includes(id) || desc.includes('sunny') || desc.includes('fine')) return SVG_ICONS.sunny;
-      if ([53, 54, 60, 61].includes(id) || desc.includes('thunderstorm') || desc.includes('squall')) return SVG_ICONS.thunderstorm;
-      if ([62, 63, 64, 65].includes(id) || desc.includes('rain') || desc.includes('shower')) return SVG_ICONS.rainy;
-      if (desc.includes('gale') || desc.includes('wind')) return SVG_ICONS.windy;
+    function getVectorIcon(iconId, descText) {
+      const id = parseInt(iconId); const txt = (descText || '').toLowerCase();
+      if ([50, 51, 52].includes(id) || txt.includes('sunny') || txt.includes('fine') || txt.includes('天晴')) return SVG_ICONS.sunny;
+      if ([53, 54, 60, 61].includes(id) || txt.includes('thunderstorm') || txt.includes('雷暴')) return SVG_ICONS.thunderstorm;
+      if ([62, 63, 64, 65].includes(id) || txt.includes('rain') || txt.includes('shower') || txt.includes('雨')) return SVG_ICONS.rainy;
+      if (txt.includes('gale') || txt.includes('wind') || txt.includes('大風')) return SVG_ICONS.windy;
       return SVG_ICONS.cloudy;
     }
 
     async function refreshData() {
       try {
-        const rhrreadUrl = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=rhrread&lang=en';
-        const warnsumUrl = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=warnsum&lang=en';
-        const fndUrl = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?dataType=fnd&lang=en';
-
-        const [rCurrent, rWarnings, rForecast] = await Promise.all([
-          fetch(rhrreadUrl), fetch(warnsumUrl), fetch(fndUrl)
+        const cb = '&_cb=' + Date.now(); // Absolute cache buster assignment
+        const base = 'https://data.weather.gov.hk/weatherAPI/opendata/weather.php?';
+        
+        const [rEn, rTc, rWnEn, rWnTc, rFcEn, rFcTc] = await Promise.all([
+          fetch(`${base}dataType=rhrread&lang=en${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=rhrread&lang=tc${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=warnsum&lang=en${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=warnsum&lang=tc${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=fnd&lang=en${cb}`).then(r => r.json()),
+          fetch(`${base}dataType=fnd&lang=tc${cb}`).then(r => r.json())
         ]);
 
-        const current = await rCurrent.json();
-        const warnings = await rWarnings.json();
-        const forecast = await rForecast.json();
-
-        // 1. Core Pillar Assignments
-        if (current.temperature && current.temperature.data) {
-          const hko = current.temperature.data.find(d => d.place === 'Hong Kong Observatory');
-          document.getElementById('curr-temp').innerText = hko ? hko.value : current.temperature.data[0].value;
+        // 1. Current temperature measurements
+        if (rEn.temperature && rEn.temperature.data) {
+          const hko = rEn.temperature.data.find(d => d.place === 'Hong Kong Observatory');
+          document.getElementById('curr-temp').innerText = hko ? hko.value : rEn.temperature.data[0].value;
         }
-        if (current.humidity && current.humidity.data) {
-          document.getElementById('curr-rh').innerText = current.humidity.data[0].value;
-        }
-        document.getElementById('curr-uv').innerText = (current.uvindex && current.uvindex.data && current.uvindex.data.length > 0) ? current.uvindex.data[0].value : '0';
-        document.getElementById('curr-pres').innerText = (current.barometer && current.barometer.data) ? current.barometer.data[0].value : '1012';
-        document.getElementById('curr-desc').innerText = current.weatherDescription || 'Stable';
+        document.getElementById('curr-rh').innerText = rEn.humidity.data[0].value;
+        document.getElementById('curr-uv').innerText = (rEn.uvindex && rEn.uvindex.data) ? rEn.uvindex.data[0].value : '0';
+        document.getElementById('curr-pres').innerText = (rEn.barometer && rEn.barometer.data) ? rEn.barometer.data[0].value : '1012';
+        document.getElementById('curr-desc').innerHTML = `${rTc.weatherDescription[0]}<br><span style="font-size:12px;color:#555">${rEn.weatherDescription[0]}</span>`;
 
-        if (current.icon && current.icon.length > 0) {
-          document.getElementById('main-icon').innerHTML = getVectorIcon(current.icon[0], current.weatherDescription);
+        if (rEn.icon && rEn.icon.length > 0) {
+          document.getElementById('main-icon').innerHTML = getVectorIcon(rEn.icon[0], rEn.weatherDescription[0]);
         }
 
-        // 2. Explicit Weather Data Update Timestamp
-        if (current.updateTime) {
-          const d = new Date(current.updateTime);
-          const timeString = d.toLocaleTimeString('en-HK', { hour: '2-digit', minute: '2-digit', hour12: true });
-          const dateString = d.toLocaleDateString('en-HK', { month: 'short', day: 'numeric' });
-          
-          document.getElementById('time').innerHTML = `
-            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #555; display: block; margin-bottom: -2px;">HKO Update</span>
-            <strong>${timeString}</strong><br>
-            <span style="font-size: 13px; color: #444;">${dateString}</span>
-          `;
+        // 2. Bilingual HKO Update Clock
+        if (rEn.updateTime) {
+          const d = new Date(rEn.updateTime);
+          const tStr = d.toLocaleTimeString('en-HK', { hour: '2-digit', minute: '2-digit', hour12: true });
+          document.getElementById('time').innerHTML = `<span style="font-size:10px;color:#555;display:block;">天文台更新 HKO UPDATE</span><strong>${tStr}</strong>`;
         }
 
-        // 3. Regional Microclimates
-        const hubs = { 'Central': '--°', 'Tsim Sha Tsui': '--°', 'Sha Tin': '--°', 'Hong Kong International Airport': '--°', 'Sai Kung': '--°' };
-        if (current.temperature && current.temperature.data) {
-          current.temperature.data.forEach(item => {
-            if (item.place in hubs) hubs[item.place] = `${item.value}°`;
-          });
-        }
-        const regList = document.getElementById('regional-list');
-        regList.innerHTML = '';
-        for (const [place, val] of Object.entries(hubs)) {
-          const displayName = place === 'Hong Kong International Airport' ? 'HK Airport' : place;
-          regList.innerHTML += `<div class="station-row"><span>${displayName}</span><span>${val}</span></div>`;
-        }
+        // 3. Regional mapping network array elements
+        const places = [
+          { en: 'Central', tc: '中環' },
+          { en: 'Tsim Sha Tsui', tc: '尖沙咀' },
+          { en: 'Sha Tin', tc: '沙田' },
+          { en: 'Hong Kong International Airport', tc: '機場' },
+          { en: 'Sai Kung', tc: '西貢' }
+        ];
+        const regList = document.getElementById('regional-list'); regList.innerHTML = '';
+        places.forEach(p => {
+          const hkoEn = rEn.temperature.data.find(d => d.place === p.en);
+          const val = hkoEn ? `${hkoEn.value}°` : '--°';
+          const nameDisplay = p.en === 'Hong Kong International Airport' ? 'HK Airport' : p.en;
+          regList.innerHTML += `<div class="station-row"><div>${p.tc} <span class="station-grid-en" style="font-size:11px;color:#555;">${nameDisplay}</span></div><strong>${val}</strong></div>`;
+        });
 
-        // 4. Warning Array Execution
-        const alertBox = document.getElementById('alertBox');
-        const alertList = document.getElementById('alertList');
-        alertList.innerHTML = '';
-        const keys = Object.keys(warnings);
-
+        // 4. Warning Array Assembly Execution
+        const alertBox = document.getElementById('alertBox'); const alertList = document.getElementById('alertList');
+        alertList.innerHTML = ''; const keys = Object.keys(rWnEn);
         if (keys.length > 0) {
           alertBox.classList.add('alert-active');
           keys.forEach(k => {
-            const row = document.createElement('div');
-            row.className = 'warning-row';
-            row.innerHTML = `<span class="warning-badge">${warnings[k].code}</span><span>${warnings[k].name.replace('Warning', '').trim()}</span>`;
+            const row = document.createElement('div'); row.className = 'warning-row';
+            row.innerHTML = `<span class="warning-badge">${rWnEn[k].code}</span><div>${rWnTc[k].name.replace('警告','').replace('信號','')}<br><span style="font-size:10px;opacity:0.8;display:block;margin-top:-2px;">${rWnEn[k].name.replace('Warning','').trim()}</span></div>`;
             alertList.appendChild(row);
           });
         } else {
           alertBox.classList.remove('alert-active');
-          alertList.innerHTML = '<div class="empty-warnings">No Active HKO Alerts</div>';
+          alertList.innerHTML = '<div class="empty-warnings" style="padding-top:40px;">大氣穩定<br><span style="font-size:12px;color:#666;">No Active Alerts</span></div>';
         }
 
-        // 5. Short-Range 4-Day Horizontal Horizon Layout
-        const fcRow = document.getElementById('forecastRow');
-        fcRow.innerHTML = '';
-        if (forecast.weatherForecast) {
-          forecast.weatherForecast.slice(0, 4).forEach(day => {
-            const shortDay = day.week.substring(0, 3);
-            const displayDate = day.forecastDate.substring(6,8) + '/' + day.forecastDate.substring(4,6);
-            const cardIcon = getVectorIcon(day.forecastIcon, day.forecastWeather);
-            
-            fcRow.innerHTML += `
-              <div class="forecast-card">
-                <div class="fc-header-row">
-                  <div class="fc-day-group">
-                    <span class="fc-day">${shortDay}</span>
-                    <span class="fc-date">${displayDate}</span>
-                  </div>
-                  <div class="fc-icon-holder">${cardIcon}</div>
-                </div>
-                <div class="fc-temp">${day.forecastMintemp.value}°–${day.forecastMaxtemp.value}°</div>
-                <div class="fc-desc">${day.forecastWeather}</div>
-              </div>`;
-          });
+        // 5. 4-Day Extended Horizon Card Generators
+        const fcRow = document.getElementById('forecastRow'); fcRow.innerHTML = '';
+        for (let i = 0; i < 4; i++) {
+          const dayEn = rFcEn.weatherForecast[i]; const dayTc = rFcTc.weatherForecast[i];
+          if (!dayEn) break;
+          const shortDay = dayEn.week.substring(0, 3);
+          const dLabel = dayEn.forecastDate.substring(6,8) + '/' + dayEn.forecastDate.substring(4,6);
+          const cIcon = getVectorIcon(dayEn.forecastIcon, dayEn.forecastWeather);
+          fcRow.innerHTML += `
+            <div class="forecast-card">
+              <div class="fc-header-row">
+                <div><span class="fc-day">${dayTc.week}</span> <span class="fc-zh">${shortDay}</span><br><span style="font-size:10px;color:#666;">${dLabel}</span></div>
+                <div class="fc-icon-holder">${cIcon}</div>
+              </div>
+              <div class="fc-temp">${dayEn.forecastMintemp.value}°–${dayEn.forecastMaxtemp.value}°</div>
+              <div class="fc-desc">${dayTc.forecastWeather}<br><span style="font-size:10px;color:#555;-webkit-line-clamp:1;overflow:hidden;">${dayEn.forecastWeather}</span></div>
+            </div>`;
         }
-
-      } catch (err) {
-        console.error('Data pipeline exception:', err);
-        document.getElementById('curr-desc').innerText = 'Sync tracking failure.';
-      }
+      } catch (err) { console.error(err); }
     }
-
     refreshData();
-    
-    // Hourly execution loops (3,600,000 milliseconds)
     setInterval(refreshData, 3600000);
   </script>
 </body>
